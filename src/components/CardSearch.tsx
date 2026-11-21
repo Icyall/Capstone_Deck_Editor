@@ -14,9 +14,11 @@ export default function CardSearch({ onAdd }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const q = query.trim()
+  const canSearch = q.length >= 2
+
   useEffect(() => {
-    const q = query.trim()
-    if (q.length < 2) { setResults([]); return }
+    if (!canSearch) return
 
     // Wait 300 ms after the user stops typing before calling the API
     const timer = setTimeout(() => {
@@ -28,7 +30,10 @@ export default function CardSearch({ onAdd }: Props) {
         .finally(() => setLoading(false))
     }, 300)
     return () => clearTimeout(timer)
-  }, [query, page])
+  }, [q, page, canSearch])
+
+  // Hide old results when the search box is too short
+  const shown = canSearch ? results : []
 
   return (
     <div>
@@ -39,19 +44,19 @@ export default function CardSearch({ onAdd }: Props) {
         onChange={e => { setQuery(e.target.value); setPage(1) }}
       />
 
-      {loading && <p>Loading…</p>}
-      {error && <p className="error">{error}</p>}
-      {!loading && query.trim().length >= 2 && results.length === 0 && <p>No cards found.</p>}
+      {canSearch && loading && <p>Loading…</p>}
+      {canSearch && error && <p className="error">{error}</p>}
+      {canSearch && !loading && !error && shown.length === 0 && <p>No cards found.</p>}
 
       <div className="card-grid">
-        {results.map(card => <CardTile key={card.id} card={card} onAdd={onAdd} />)}
+        {shown.map(card => <CardTile key={card.id} card={card} onAdd={onAdd} />)}
       </div>
 
-      {results.length > 0 && (
+      {shown.length > 0 && (
         <div className="pager">
           <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>← Prev</button>
           <span>Page {page}</span>
-          <button disabled={results.length < PAGE_SIZE} onClick={() => setPage(p => p + 1)}>Next →</button>
+          <button disabled={shown.length < PAGE_SIZE} onClick={() => setPage(p => p + 1)}>Next →</button>
         </div>
       )}
     </div>

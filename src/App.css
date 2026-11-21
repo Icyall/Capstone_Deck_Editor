@@ -1,0 +1,14 @@
+body { margin: 0; font-family: system-ui, sans-serif; }
+.nav { display: flex; gap: 16px; padding: 12px 24px; background: #222; }
+.nav a { color: white; text-decoration: none; font-weight: 600; }
+main { padding: 16px 24px; }
+.search-box { width: 100%; max-width: 400px; padding: 8px; font-size: 16px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 12px; }
+.card-tile { text-align: center; font-size: 13px; }
+.card-tile img { width: 100%; border-radius: 6px; }
+.card-placeholder { aspect-ratio: 63/88; display: grid; place-items: center; background: #ddd; border-radius: 6px; }
+.pager { display: flex; gap: 12px; align-items: center; margin: 16px 0; }
+.error { color: crimson; }
+.editor { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+.deck-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.deck-row span { flex: 1; }
